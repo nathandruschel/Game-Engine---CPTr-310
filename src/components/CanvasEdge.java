@@ -33,8 +33,8 @@ public class CanvasEdge implements Constants {
         Point2D.Float[] corners = {
           new Point2D.Float(hitBox.x, hitBox.y),
           new Point2D.Float(hitBox.x + hitBox.width, hitBox.y),
-          new Point2D.Float(hitBox.x, hitBox.y + hitBox.height),
-          new Point2D.Float(hitBox.x + hitBox.width, hitBox.y + hitBox.height)
+          new Point2D.Float(hitBox.x + hitBox.width, hitBox.y + hitBox.height),
+          new Point2D.Float(hitBox.x, hitBox.y + hitBox.height)
         };
         float minDist = Float.POSITIVE_INFINITY;
         for (Point2D.Float c : corners){
