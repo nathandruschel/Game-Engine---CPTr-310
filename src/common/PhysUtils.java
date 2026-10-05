@@ -7,7 +7,7 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
-public class PhysUtils implements Constants {
+public class PhysUtils {
 
     public static void resolveCollision(Entity a, Entity b) {
 
@@ -16,6 +16,20 @@ public class PhysUtils implements Constants {
 
         if (!ra.intersects(rb))
             return;
+
+        Point2D.Float normals = computeCollisionNormals(a, b);
+        Rectangle2D.Float overlap = (Rectangle2D.Float) ra.createIntersection(rb);
+
+        separateEntities(a, b, normals.getX(), normals.getY(), overlap);
+
+        // ----- Collision response -----
+        collisionResponse(a, b, normals.getX(), normals.getY());
+    }
+
+    private static Point2D.Float computeCollisionNormals(Entity a, Entity b) {
+
+        Rectangle2D.Float ra = a.getHitBox();
+        Rectangle2D.Float rb = b.getHitBox();
 
         Rectangle2D.Float overlap = (Rectangle2D.Float) ra.createIntersection(rb);
 
@@ -35,11 +49,7 @@ public class PhysUtils implements Constants {
             nx = 0;
             ny = Math.signum(bcy - acy);
         }
-
-        separateEntities(a, b, nx, ny, overlap);
-
-        // ----- Collision response -----
-        collisionResponse(a, b, nx, ny);
+        return new Point2D.Float((float) nx, (float) ny);
     }
 
     private static void separateEntities(Entity a, Entity b, double nx, double ny, Rectangle2D.Float overlap) {
@@ -65,7 +75,17 @@ public class PhysUtils implements Constants {
         }
     }
 
-    private static void collisionResponse(Entity a, Entity b,
+    public static double relativeNormalVelocity(Entity a, Entity b) {
+
+        Point2D.Float normals = computeCollisionNormals(a, b);
+        double rvx = b.getXvel() - a.getXvel();
+        double rvy = b.getYvel() - a.getYvel();
+
+        return rvx * normals.getX() + rvy * normals.getY();
+    }
+
+    private static void collisionResponse(Entity a,
+                                          Entity b,
                                           double nx, double ny) {
         double rvx = b.getXvel() - a.getXvel();
         double rvy = b.getYvel() - a.getYvel();
@@ -77,24 +97,24 @@ public class PhysUtils implements Constants {
         if (vn >= 0)
             return;
 
+        double impulse = -vn/2.0;
+
         if (a.isMovable() && b.isMovable()) {
-            double impulse = -vn;
 
-            a.setXvel((float) (a.getXvel() - impulse * nx));
-            a.setYvel((float) (a.getYvel() - impulse * ny));
+            a.setXvel((float) (a.getXvel() + vn * nx));
+            a.setYvel((float) (a.getYvel() + vn * ny));
 
-            b.setXvel((float) (b.getXvel() + impulse * nx));
-            b.setYvel((float) (b.getYvel() + impulse * ny));
+            b.setXvel((float) (b.getXvel() - vn * nx));
+            b.setYvel((float) (b.getYvel() - vn * ny));
         } else if (a.isMovable()) {
             // B is immovable
-            a.setXvel((float) (a.getXvel() - vn * nx));
-            a.setYvel((float) (a.getYvel() - vn * ny));
+            a.setXvel((float) (a.getXvel() + impulse * nx));
+            a.setYvel((float) (a.getYvel() + impulse * ny));
 
         } else if (b.isMovable()) {
-
             // A is immovable
-            b.setXvel((float) (b.getXvel() + vn * nx));
-            b.setYvel((float) (b.getYvel() + vn * ny));
+            b.setXvel((float) (b.getXvel() - impulse * nx));
+            b.setYvel((float) (b.getYvel() - impulse * ny));
         }
     }
 

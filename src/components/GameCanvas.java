@@ -5,6 +5,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferStrategy;
+import java.util.Arrays;
 
 public class GameCanvas extends Canvas {
     private CanvasEdge[] edges;
@@ -60,14 +61,25 @@ public class GameCanvas extends Canvas {
         return edges[3];
     }
 
-    public void RenderTask(EntityView[] views){
+    public void renderTask(EntityView[] views){
         BufferStrategy bufferStrategy = getBufferStrategy();
         do{
             do{
                 //draw all views
+                Graphics2D gc = (Graphics2D) bufferStrategy.getDrawGraphics();
+                int w = getWidth();
+                int h = getHeight();
+                gc.setClip(0,0, w, h);
+                //draw black background
+                gc.setBackground(Color.BLACK);
+                gc.clearRect(0, 0, w, h);
+                Arrays.stream(views).forEach(v -> v.render(gc));
+                gc.dispose();
             } while (bufferStrategy.contentsRestored());
             //swap the buffers
             bufferStrategy.show();
+            bufferStrategy.show();
         } while (bufferStrategy.contentsRestored());
     }
+
 }
