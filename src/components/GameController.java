@@ -127,7 +127,7 @@ public abstract class GameController implements Constants, KeyActivityListener, 
     }
 
     private void checkUserInteractions() {
-        gameView.pullKeyboard();
+        gameView.pollKeyboard();
     }
 
     private void processDeletions() {

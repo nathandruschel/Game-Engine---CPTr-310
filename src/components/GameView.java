@@ -79,7 +79,7 @@ public class GameView extends JPanel implements Constants {
         return canvas.getLeftEdge();
     }
 
-    public void pullKeyboard(){
+    public void pollKeyboard(){
         keyboardAdapter.notifyKeyAction();
     }
 

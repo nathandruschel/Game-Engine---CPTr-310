@@ -14,6 +14,14 @@ public class OutOfBoundsEvent {
         this.edge = edge;
     }
 
+    public CanvasEdge getEdge() {
+        return edge;
+    }
+
+    public Entity getEntity() {
+        return entity;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;

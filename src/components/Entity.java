@@ -106,8 +106,8 @@ public class Entity implements Constants {
     }
 
     public void update(float elapsedTime) {
-        xloc = xloc + xvel * elapsedTime;
-        yloc = yloc + yvel * elapsedTime;
+        xloc = xloc + xvel * elapsedTime/100;
+        yloc = yloc + yvel * elapsedTime/100;
     }
 
     public void dispose() {
