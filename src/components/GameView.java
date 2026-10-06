@@ -1,24 +1,20 @@
 package components;
 
 import common.Constants;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
-import java.util.Map;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class GameView extends JPanel implements Constants {
 
     private GameCanvas canvas;
-    private final Map<Long, EntityView> entityViews;
     private final GameController controller;
     private GameKeyboardAdapter keyboardAdapter;
 
 
     public GameView(GameController controller){
-        entityViews = new ConcurrentHashMap<>();
         this.controller = controller;
         controller.setGameView(this);
         addComponents();
@@ -34,8 +30,19 @@ public class GameView extends JPanel implements Constants {
         canvas.setBackground(Color.BLACK);
     }
 
-    public void render(){
-        final EntityView[] views = entityViews.values().toArray(new EntityView[0]);
+    @Override
+    public void addNotify() {
+        controller.viewAdded();
+        super.addNotify();
+    }
+
+    @Override
+    public void removeNotify() {
+        controller.viewRemoved();
+        super.removeNotify();
+    }
+
+    public void render(final EntityView[] views){
         SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
             @Override
             protected Void doInBackground() throws Exception {
@@ -80,11 +87,4 @@ public class GameView extends JPanel implements Constants {
         return new Dimension(getWidth(), getHeight());
     }
 
-    public void addView(EntityView view){
-        entityViews.put(view.getId(), view);
-    }
-
-    public void removeView(Long id){
-        entityViews.remove(id);
-    }
 }
