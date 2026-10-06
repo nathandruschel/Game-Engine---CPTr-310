@@ -50,6 +50,10 @@ public abstract class GameController implements Constants, KeyActivityListener, 
         gameClock.schedule(gameLoop, START_DELAY, PERIOD);
     }
 
+    protected void addRenderable(Renderable r){
+        pendingAdditions.add(r);
+    }
+
     private class GameLoop extends TimerTask{
 
         @Override
@@ -127,7 +131,7 @@ public abstract class GameController implements Constants, KeyActivityListener, 
     }
 
     private void checkUserInteractions() {
-        gameView.pullKeyboard();
+        gameView.pollKeyboard();
     }
 
     private void processDeletions() {

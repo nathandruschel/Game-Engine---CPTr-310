@@ -23,6 +23,7 @@ public class GameView extends JPanel implements Constants {
     private void addComponents() {
         setLayout(new BorderLayout());
         canvas = new GameCanvas();
+        keyboardAdapter = new GameKeyboardAdapter(controller);
         canvas.addKeyListener(new GameKeyboardAdapter(controller));
         canvas.addMouseListener(new GameMouseAdapter(controller));
         //Add adapters to the canvas TODO
@@ -79,7 +80,7 @@ public class GameView extends JPanel implements Constants {
         return canvas.getLeftEdge();
     }
 
-    public void pullKeyboard(){
+    public void pollKeyboard(){
         keyboardAdapter.notifyKeyAction();
     }
 
