@@ -78,8 +78,8 @@ public class GameCanvas extends Canvas {
             } while (bufferStrategy.contentsRestored());
             //swap the buffers
             bufferStrategy.show();
-            bufferStrategy.show();
-        } while (bufferStrategy.contentsRestored());
+        } while (bufferStrategy.contentsLost());
+        getToolkit().sync();
     }
 
 }

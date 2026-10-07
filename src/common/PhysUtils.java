@@ -129,8 +129,8 @@ public class PhysUtils {
         //(nx, ny) is one of the two possible unit normals.
         Point2D.Float norms = edge.getNormals();
         float penetration = edge.getPenetration(entity.getHitBox());
-        entity.move(norms.x * penetration,
-                norms.y * penetration);
+        //entity.move(norms.x * penetration,
+           //     norms.y * penetration);
     }
 
     private static Point2D.Float reflectVelocity(

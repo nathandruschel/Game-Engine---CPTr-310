@@ -13,7 +13,7 @@ public class EntityView implements Constants {
     private float xloc, yloc;
     private final Entity model;
     private boolean showHitbox;
-    private final int RADIOUS = 5; //5 pixels
+    private int RADIOUS = rand.nextInt(1,30); //5 pixels
     private Color[] colors = {
             Color.WHITE,
             Color.RED,
@@ -21,15 +21,14 @@ public class EntityView implements Constants {
             Color.GREEN,
             Color.ORANGE,
             Color.YELLOW,
-            Color.CYAN,
-            new Color(211, 175, 55, 1)
+            Color.CYAN
     };
 
     public EntityView(Entity model){
         this.id = model.getID();
         this.model = model;
         image = setView();
-        update();
+        model.setDimension(new Dimension(image.getWidth(), image.getHeight()));
     }
 
     //Getters and Setters

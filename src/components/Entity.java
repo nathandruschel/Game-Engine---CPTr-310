@@ -2,6 +2,7 @@ package components;
 
 import common.Constants;
 
+import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicLong;
@@ -14,6 +15,7 @@ public class Entity implements Constants {
     private boolean movable = true;
     private int disposalFrames = -1;
     private String name = "Entity";
+    private Dimension dimension;
 
 
     public Entity() {
@@ -82,7 +84,11 @@ public class Entity implements Constants {
     }
 
     public Rectangle2D.Float getHitBox() {
-        return new Rectangle2D.Float(xloc - HITBOX /2.0f, yloc - HITBOX /2.0f, HITBOX, HITBOX); //moves the rectangle left and up so the Entity is in the center of the hitbox
+        return new Rectangle2D.Float(xloc - dimension.width /2.0f, yloc - dimension.height /2.0f, dimension.width, dimension.height); //moves the rectangle left and up so the Entity is in the center of the hitbox
+    }
+
+    public void setDimension(Dimension dimension){
+        this.dimension = dimension;
     }
 
     @Override

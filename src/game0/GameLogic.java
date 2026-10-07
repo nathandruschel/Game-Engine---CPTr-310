@@ -24,7 +24,7 @@ public class GameLogic extends GameController {
         dot.setXvel(vx);
         dot.setYvel(vy);
         EntityView dotView = new EntityView(dot);
-
+        dotView.setShowHitbox(true);
         Renderable r = new Renderable(dot, dotView);
         addRenderable(r);
     }
@@ -36,7 +36,9 @@ public class GameLogic extends GameController {
 
     @Override
     public void onCollision(CollisionEvent e) {
-
+        Entity a = e.getA();
+        Entity b = e.getB();
+        PhysUtils.resolveCollision(a, b);
     }
 
     @Override
@@ -61,8 +63,15 @@ public class GameLogic extends GameController {
         int x = e.getX();
         int y = e.getY();
 
-        float vx = random.nextFloat(4, 20);
-        float vy = random.nextFloat(4, 20);
+        float vx = random.nextFloat(-39, 40);
+        float vy = random.nextFloat(-39, 40);
         createDot(x, y, vx, vy);
     }
+
+    //Use this code in collision or out of bounds to make your machine explode
+//    int x = random.nextInt(800);
+//    int y = random.nextInt(600);
+//    float vx = random.nextFloat(-39, 40);
+//    float vy = random.nextFloat(-39, 40);
+//    createDot(x, y, vx, vy);
 }
