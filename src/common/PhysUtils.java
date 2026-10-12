@@ -7,14 +7,14 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
-public class PhysUtils {
+public class PhysUtils implements Constants{
 
     public static void resolveCollision(Entity a, Entity b) {
 
         Rectangle2D.Float ra = a.getHitBox();
         Rectangle2D.Float rb = b.getHitBox();
-
-        if (!ra.intersects(rb))
+        float timeToHit = timeToHit(a, b);
+        if (!ra.intersects(rb) || Float.compare(timeToHit, PERIOD) > 0)
             return;
 
         Point2D.Float normals = computeCollisionNormals(a, b);
@@ -127,10 +127,11 @@ public class PhysUtils {
 
         // Separate the entity from the edge
         //(nx, ny) is one of the two possible unit normals.
+        Rectangle2D.Float box = entity.getHitBox();
         Point2D.Float norms = edge.getNormals();
+
         float penetration = edge.getPenetration(entity.getHitBox());
-        //entity.move(norms.x * penetration,
-           //     norms.y * penetration);
+        entity.move(norms.x * penetration, norms.y * penetration);
     }
 
     private static Point2D.Float reflectVelocity(
@@ -156,4 +157,26 @@ public class PhysUtils {
                 (float) (vy - 2 * dot * ny)
         );
     }
+
+    public static float timeToHit(Entity e1, Entity e2)
+    {
+        if (e1 == e2) return Float.POSITIVE_INFINITY;
+        double dx = e2.getXloc() - e1.getXloc();
+        double dy = e2.getYloc() - e1.getYloc();
+        double dvx = e2.getXvel() - e1.getXvel();
+        double dvy = e2.getYvel() - e1.getYvel();
+        double dvdr = dx*dvx + dy*dvy;
+        if( dvdr > 0) return Float.POSITIVE_INFINITY;
+        double dvdv = dvx*dvx + dvy*dvy;
+        double drdr = dx*dx + dy*dy;
+        Rectangle2D.Float hitbox1 = e1.getHitBox();
+        Rectangle2D.Float hitbox2 = e2.getHitBox();
+        double radius1 = Math.hypot(hitbox1.width, hitbox1.height);
+        double radius2 = Math.hypot(hitbox2.width, hitbox2.height);
+        double sigma = radius1 + radius2;
+        double d = (dvdr*dvdr) - dvdv * (drdr - sigma*sigma);
+        if (d < 0) return Float.POSITIVE_INFINITY;
+        return (float) (-(dvdr + Math.sqrt(d)) / dvdv);
+    }
+
 }

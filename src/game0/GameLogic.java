@@ -24,7 +24,8 @@ public class GameLogic extends GameController {
         dot.setXvel(vx);
         dot.setYvel(vy);
         EntityView dotView = new EntityView(dot);
-        dotView.setShowHitbox(true);
+        //dotView.setScaling(2.0f);
+        //dotView.setShowHitbox(true);
         Renderable r = new Renderable(dot, dotView);
         addRenderable(r);
     }

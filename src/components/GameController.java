@@ -91,12 +91,21 @@ public abstract class GameController implements Constants, KeyActivityListener, 
         Entity[] entities = getEntities();
 
         for (Entity e : entities){
+            CanvasEdge edge = null;
             Rectangle2D.Float hitBox = e.getHitBox();
-            CanvasEdge edge = gameView.findEdge(hitBox);
+            if(hitBox.x < 0){
+                edge = gameView.getLeftEdge();
+            } else if(hitBox.x + hitBox.width > gameView.getWidth()){
+                edge = gameView.getRightEdge();
+            } else if(hitBox.y < 0) {
+                edge = gameView.getTopEdge();
+            } else if(hitBox.y + hitBox.height > gameView.getHeight()){
+                edge = gameView.getBottomEdge();
+            }
             if (edge != null){
                 OutOfBoundsEvent event = new OutOfBoundsEvent(e, edge);
                 currentOutOfBounds.add(event);
-                if (!activeCollisions.contains(event)){
+                if (!activeOutOfBounds.contains(event)){
                     onOutOfBounds(event);
                 }
             }

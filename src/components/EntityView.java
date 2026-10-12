@@ -1,6 +1,7 @@
 package components;
 
 import common.Constants;
+import common.SpriteUtils;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
@@ -10,10 +11,11 @@ import java.util.Objects;
 public class EntityView implements Constants {
     private final long id;
     protected BufferedImage image;
-    private float xloc, yloc;
-    private final Entity model;
-    private boolean showHitbox;
-    private int RADIOUS = rand.nextInt(1,30); //5 pixels
+    protected float xloc, yloc;
+    protected final Entity model;
+    protected boolean showHitbox;
+    private int RADIOUS = 5; //5 pixels rand.nextInt(1,30)
+    protected float scaling = 1.0f;
     private Color[] colors = {
             Color.WHITE,
             Color.RED,
@@ -60,6 +62,16 @@ public class EntityView implements Constants {
         this.xloc = xloc;
     }
 
+    public float getScaling() {
+        return scaling;
+    }
+
+    public void setScaling(float scaling) {
+        this.scaling = scaling;
+        image = SpriteUtils.scaleSprite(image, scaling);
+        model.setDimension(new Dimension(image.getWidth(), image.getHeight()));
+    }
+
     //Methods - everything else besides getters and setters
     public void update(){
         xloc = model.getXloc() - image.getWidth()/2.0f;
@@ -79,12 +91,16 @@ public class EntityView implements Constants {
     public void render(Graphics2D gc){
         gc.drawImage(image, (int) xloc, (int) yloc, null);
         if (showHitbox){
-            Color oldColor = gc.getColor();
-            gc.setColor(new Color(0xFF00FF));
-            Rectangle2D.Float hitbox = model.getHitBox();
-            gc.drawRect((int) hitbox.x, (int) hitbox.y, (int) hitbox.width, (int) hitbox.height);
-            gc.setColor(oldColor);
+            showHitBox(gc);
         }
+    }
+
+    protected void showHitBox(Graphics2D gc){
+        Color oldColor = gc.getColor();
+        gc.setColor(new Color(0xFF00FF));
+        Rectangle2D.Float hitbox = model.getHitBox();
+        gc.drawRect((int) hitbox.x, (int) hitbox.y, (int) hitbox.width, (int) hitbox.height);
+        gc.setColor(oldColor);
     }
 
     @Override

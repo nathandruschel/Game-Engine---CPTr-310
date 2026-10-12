@@ -104,5 +104,45 @@ public class SpriteUtils {
         }
     }
 
-}
+    public static int getImageCount(String resource) throws Exception {
+        String regex = "^[a-zA-Z0-9]+-([0-9]+)$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(resource);
+        if (matcher.find()) {
+            return Integer.parseInt(matcher.group(1));
+        } else {
+            throw new Exception("Bad name \"" + resource + "\"! Expected regex \"^[a-z0-9]+-[0-9]+.png$\"");
+        }
+    }
+    public static BufferedImage scaleSprite(BufferedImage sprite,
+                                            float scaling) {
 
+        BufferedImage image = new BufferedImage((int) (sprite.getWidth() * scaling),
+                (int) (sprite.getHeight() * scaling),
+                BufferedImage.TYPE_INT_ARGB);
+        int dx1 = 0;
+        int dy1 = 0;
+        int dx2 = image.getWidth();
+        int dy2 = image.getHeight();
+        int sx1 = 0;
+        int sy1 = 0;
+        int sx2 = sprite.getWidth();
+        int sy2 = sprite.getHeight();
+        Graphics2D gc = image.createGraphics();
+        gc.drawImage(sprite, dx1, dy1, dx2, dy2, sx1, sy1, sx2, sy2, null);
+        return image;
+    }
+
+    public static BufferedImage centerImageOnCanvas(BufferedImage image,
+                                                    int width,
+                                                    int height) {
+        BufferedImage bufferedImage = new BufferedImage(width, height,
+                BufferedImage.TYPE_INT_ARGB);
+        Graphics2D gc = bufferedImage.createGraphics();
+        int xoff = (int) ((width - image.getWidth())/2.0f);
+        int yoff = (int) ((height - image.getHeight())/2.0f);
+        gc.drawImage(image, xoff, yoff, null);
+        gc.dispose();
+        return bufferedImage;
+    }
+}
