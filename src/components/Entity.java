@@ -112,6 +112,7 @@ public class Entity implements Constants {
     }
 
     public void update(float elapsedTime) {
+        elapsedTime = Math.min(elapsedTime, PERIOD);
         xloc = xloc + xvel * elapsedTime/100;
         yloc = yloc + yvel * elapsedTime/100;
     }

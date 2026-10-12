@@ -78,7 +78,7 @@ public class EntityView implements Constants {
         yloc = model.getYloc() - image.getHeight()/2.0f;
     }
 
-    private BufferedImage setView(){
+    protected BufferedImage setView(){
         int index = rand.nextInt(0, 1000) % colors.length;
         BufferedImage image = new BufferedImage(2*RADIOUS, 2*RADIOUS, BufferedImage.TYPE_INT_ARGB);
         Graphics2D gc = image.createGraphics();
