@@ -24,8 +24,16 @@ public abstract class GameController implements Constants, KeyActivityListener, 
         pendingAdditions = new ArrayList<>();
     }
 
+    public GameView getGameView(){
+        return gameView;
+    }
+
     public void setGameView(GameView gameView) {
         this.gameView = gameView;
+    }
+
+    public EntityView getView(Entity entity){
+        return renderableMap.get(entity.getID()).getView();
     }
 
     public void viewAdded() {
@@ -80,7 +88,11 @@ public abstract class GameController implements Constants, KeyActivityListener, 
     private void processUpdateRenderable(Renderable r, float elapsedTime) {
         Entity e = r.getModel();
         e.update(elapsedTime);
-        r.getView().update();
+        GameView gv = getGameView();
+        EntityView v =r.getView();
+        if(v.getModel().isWrapAround()){
+            e.wrapAround(gv.getWidth(), gv.getHeight());
+        }
         if (e.isDisposing()){
             e.tickDispose();
         }

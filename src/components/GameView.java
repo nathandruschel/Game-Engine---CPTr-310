@@ -24,7 +24,7 @@ public class GameView extends JPanel implements Constants {
         setLayout(new BorderLayout());
         canvas = new GameCanvas();
         keyboardAdapter = new GameKeyboardAdapter(controller);
-        canvas.addKeyListener(new GameKeyboardAdapter(controller));
+        canvas.addKeyListener(keyboardAdapter);
         canvas.addMouseListener(new GameMouseAdapter(controller));
         //Add adapters to the canvas TODO
         add(canvas, BorderLayout.CENTER);

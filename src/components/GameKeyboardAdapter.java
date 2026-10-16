@@ -18,12 +18,17 @@ public class GameKeyboardAdapter extends KeyAdapter {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        super.keyPressed(e);
+        activeKeys.add(e.getKeyCode());
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-        super.keyReleased(e);
+        activeKeys.remove(e.getKeyCode());
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+        listener.onKeyTyped(e.getExtendedKeyCode());
     }
 
     public int[] getActiveKeys(){

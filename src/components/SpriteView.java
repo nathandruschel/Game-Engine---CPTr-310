@@ -49,4 +49,25 @@ public class SpriteView extends EntityView{
         }
     }
 
+    @Override
+    public void setScaling(float scaling){
+        this.scaling = scaling;
+        for (int i = 0; i < spriteSheet.size(); i++) {
+            image = spriteSheet.remove();
+            image = SpriteUtils.scaleSprite(image, scaling);
+            spriteSheet.add(image);
+        }
+        model.setDimension(new Dimension(image.getWidth(), image.getHeight()));
+    }
+
+    public void modifyView(String resource){
+        image = setView(resource);
+        model.setDimension(new Dimension(image.getWidth(), image.getHeight()));
+    }
+
+    @Override
+    public void render(Graphics2D gc) {
+        super.render(gc);
+        rollSprite();
+    }
 }

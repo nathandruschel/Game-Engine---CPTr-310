@@ -73,7 +73,12 @@ public class GameCanvas extends Canvas {
                 //draw black background
                 gc.setBackground(Color.BLACK);
                 gc.clearRect(0, 0, w, h);
-                Arrays.stream(views).forEach(v -> v.render(gc));
+                Arrays.stream(views).forEach(v -> {
+                    if(v.getModel().isWrapAround())
+                        v.renderWrapped(gc, w, h);
+                    else
+                        v.render(gc);
+                });
                 gc.dispose();
             } while (bufferStrategy.contentsRestored());
             //swap the buffers

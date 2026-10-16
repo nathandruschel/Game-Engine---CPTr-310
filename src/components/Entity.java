@@ -16,6 +16,7 @@ public class Entity implements Constants {
     private int disposalFrames = -1;
     private String name = "Entity";
     private Dimension dimension;
+    protected boolean wrapAround = false;
 
 
     public Entity() {
@@ -25,6 +26,14 @@ public class Entity implements Constants {
     //Getters, Setters, Equals, and Hashcode - oh my!
     public Long getID() {
         return id;
+    }
+
+    public boolean isWrapAround() {
+        return wrapAround;
+    }
+
+    public void setWrapAround(boolean wrapAround) {
+        this.wrapAround = wrapAround;
     }
 
     public boolean isMovable() {
@@ -143,5 +152,10 @@ public class Entity implements Constants {
     @Override
     public String toString() {
         return "Entity{ id = " + id + "}";
+    }
+
+    public void wrapAround(int width, int height) {
+        xloc = ((xloc % width) + width) % width;
+        yloc = ((yloc % height) + height) % height;
     }
 }

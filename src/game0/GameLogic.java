@@ -16,7 +16,16 @@ public class GameLogic extends GameController {
         random = new Random();
     }
 
-    private void createDot(int x, int y, float vx, float vy){
+    @Override
+    public void startGame() {
+        int w = getGameView().getWidth();
+        int h = getGameView().getHeight();
+        Renderable r = createDot(w/2, h/2, -10, 0);
+        r.getModel().setWrapAround(true);
+        super.startGame();
+    }
+
+    private Renderable createDot(int x, int y, float vx, float vy){
         Entity dot = new Entity();
         dot.setXloc(x);
         dot.setYloc(y);
@@ -24,10 +33,11 @@ public class GameLogic extends GameController {
         dot.setXvel(vx);
         dot.setYvel(vy);
         EntityView dotView = new EntityView(dot);
-        //dotView.setScaling(10.0f);
+        dotView.setScaling(2.0f);
         //dotView.setShowHitbox(true);
         Renderable r = new Renderable(dot, dotView);
         addRenderable(r);
+        return r;
     }
 
     @Override
@@ -46,11 +56,19 @@ public class GameLogic extends GameController {
     public void onOutOfBounds(OutOfBoundsEvent e) {
         CanvasEdge edge = e.getEdge();
         Entity entity = e.getEntity();
+        if (getView(entity).getModel().isWrapAround()){
+            return;
+        }
         PhysUtils.resolveOutOfBounds(entity, edge);
     }
 
     @Override
     public void onKeyActivity(int[] keyCodes) {
+
+    }
+
+    @Override
+    public void onKeyTyped(int extendedKeyCode) {
 
     }
 

@@ -11,7 +11,6 @@ import java.util.Objects;
 public class EntityView implements Constants {
     private final long id;
     protected BufferedImage image;
-    protected float xloc, yloc;
     protected final Entity model;
     protected boolean showHitbox;
     private int RADIOUS = 5; //5 pixels rand.nextInt(1,30)
@@ -46,22 +45,6 @@ public class EntityView implements Constants {
         this.showHitbox = showHitbox;
     }
 
-    public float getYloc() {
-        return yloc;
-    }
-
-    public void setYloc(float yloc) {
-        this.yloc = yloc;
-    }
-
-    public float getXloc() {
-        return xloc;
-    }
-
-    public void setXloc(float xloc) {
-        this.xloc = xloc;
-    }
-
     public float getScaling() {
         return scaling;
     }
@@ -70,12 +53,6 @@ public class EntityView implements Constants {
         this.scaling = scaling;
         image = SpriteUtils.scaleSprite(image, scaling);
         model.setDimension(new Dimension(image.getWidth(), image.getHeight()));
-    }
-
-    //Methods - everything else besides getters and setters
-    public void update(){
-        xloc = model.getXloc() - image.getWidth()/2.0f;
-        yloc = model.getYloc() - image.getHeight()/2.0f;
     }
 
     protected BufferedImage setView(){
@@ -89,7 +66,52 @@ public class EntityView implements Constants {
     }
 
     public void render(Graphics2D gc){
+        float xloc = model.getXloc() - image.getWidth()/2.0f;
+        float yloc = model.getYloc() - image.getHeight()/2.0f;
         gc.drawImage(image, (int) xloc, (int) yloc, null);
+        if (showHitbox){
+            showHitBox(gc);
+        }
+    }
+
+    public void renderWrapped(Graphics2D gc, int canvasWidth, int canvasHeight){
+        double w = image.getWidth();
+        double h = image.getHeight();
+        float xloc = (float) (model.getXloc() - w/2.0f);
+        float yloc = (float) (model.getYloc() - h/2.0f);
+        //Always draw main image
+        gc.drawImage(image, (int) xloc, (int) yloc, null);
+        boolean left = xloc < 0;
+        boolean right = xloc + w > canvasWidth;
+        boolean top = yloc < 0;
+        boolean bottom = yloc + h > canvasHeight;
+        //horizontal copies
+        if (left){
+            gc.drawImage(image, (int) (xloc + canvasWidth), (int) yloc, null);
+        }
+        if (right){
+            gc.drawImage(image, (int) (xloc - canvasWidth), (int) yloc, null);
+        }
+        //vertical copies
+        if (top){
+            gc.drawImage(image, (int) xloc, (int) (yloc + canvasHeight), null);
+        }
+        if (bottom){
+            gc.drawImage(image, (int) xloc, (int) (yloc - canvasHeight), null);
+        }
+        //corner copies
+        if (left && top){
+            gc.drawImage(image, (int) (xloc + canvasWidth), (int) (yloc + canvasHeight), null);
+        }
+        if (left && bottom){
+            gc.drawImage(image, (int) (xloc + canvasWidth), (int) (yloc - canvasHeight), null);
+        }
+        if (right && top){
+            gc.drawImage(image, (int) (xloc - canvasWidth), (int) (yloc + canvasHeight), null);
+        }
+        if (right && bottom){
+            gc.drawImage(image, (int) (xloc - canvasWidth), (int) (yloc - canvasHeight), null);
+        }
         if (showHitbox){
             showHitBox(gc);
         }
@@ -113,5 +135,9 @@ public class EntityView implements Constants {
     @Override
     public int hashCode() {
         return Objects.hashCode(id);
+    }
+
+    public Entity getModel() {
+        return model;
     }
 }
