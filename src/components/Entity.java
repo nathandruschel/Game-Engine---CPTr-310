@@ -17,6 +17,7 @@ public class Entity implements Constants {
     private String name = "Entity";
     private Dimension dimension;
     protected boolean wrapAround = false;
+    protected boolean ghost = false;
 
 
     public Entity() {
@@ -34,6 +35,14 @@ public class Entity implements Constants {
 
     public void setWrapAround(boolean wrapAround) {
         this.wrapAround = wrapAround;
+    }
+
+    public boolean isGhost() {
+        return ghost;
+    }
+
+    public void setGhost(boolean ghost) {
+        this.ghost = ghost;
     }
 
     public boolean isMovable() {

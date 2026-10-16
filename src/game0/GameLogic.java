@@ -20,8 +20,14 @@ public class GameLogic extends GameController {
     public void startGame() {
         int w = getGameView().getWidth();
         int h = getGameView().getHeight();
-        Renderable r = createDot(w/2, h/2, -10, 0);
+        SceneryEntity scenery = new SceneryEntity(w, h);
+        scenery.setXvel(-10.0f);
+        SceneryView sceneryView = new SceneryView(scenery, w, h, "scenery-1");
+        Renderable r = new Renderable(scenery, sceneryView);
+        addRenderable(r);
+        r = createDot(w/2, h/2, -10, 0);
         r.getModel().setWrapAround(true);
+        addRenderable(r);
         super.startGame();
     }
 

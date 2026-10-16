@@ -50,7 +50,7 @@ public abstract class GameController implements Constants, KeyActivityListener, 
     }
 
     private EntityView[] getViews(){
-        return renderableMap.values().stream().map(Renderable::getView).toArray(EntityView[]::new);
+        return renderableMap.values().stream().map(Renderable::getView).sorted().toArray(EntityView[]::new);
     }
 
     public void startGame(){
@@ -133,7 +133,12 @@ public abstract class GameController implements Constants, KeyActivityListener, 
             for (int j = i+1; j < entities.length; j++) {
                 Entity a = entities[i];
                 Entity b = entities[j];
-
+                if (a == b){
+                    continue;
+                }
+                if (a.isGhost() || b.isGhost()){
+                    continue;
+                }
                 if (a.getHitBox().intersects(b.getHitBox())){
                     CollisionPair pair = new CollisionPair(a, b);
                     currentCollisions.add(pair);

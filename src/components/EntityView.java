@@ -8,13 +8,14 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.Objects;
 
-public class EntityView implements Constants {
+public class EntityView implements Constants, Comparable<EntityView>{
     private final long id;
     protected BufferedImage image;
     protected final Entity model;
     protected boolean showHitbox;
     private int RADIOUS = 5; //5 pixels rand.nextInt(1,30)
     protected float scaling = 1.0f;
+    protected int layer = 1;
     private Color[] colors = {
             Color.WHITE,
             Color.RED,
@@ -35,6 +36,14 @@ public class EntityView implements Constants {
     //Getters and Setters
     public long getId() {
         return id;
+    }
+
+    public int getLayer() {
+        return layer;
+    }
+
+    public void setLayer(int layer) {
+        this.layer = layer;
     }
 
     public boolean isShowHitbox() {
@@ -139,5 +148,10 @@ public class EntityView implements Constants {
 
     public Entity getModel() {
         return model;
+    }
+
+    @Override
+    public int compareTo(EntityView o) {
+        return this.layer - o.layer;
     }
 }

@@ -13,16 +13,16 @@ public class SpriteView extends EntityView{
     protected int skipcount = 5; //clock ticks/frames
     protected int rollSprite = 0;
 
-    public SpriteView(Entity model, String resource) {
-        super(model);
+    public SpriteView(Entity entity, String resource) {
+        super(entity);
         if (resource != null){
             image = setView(resource);
-            model.setDimension(new Dimension(image.getWidth(), image.getHeight()));
+            entity.setDimension(new Dimension(image.getWidth(), image.getHeight()));
         } else {
             LOGGER.warning("Resource file cannot be null");
             image = setView();
         }
-        model.setDimension(new Dimension(image.getWidth(), image.getHeight()));
+        entity.setDimension(new Dimension(image.getWidth(), image.getHeight()));
     }
 
     protected BufferedImage setView(String resource){
